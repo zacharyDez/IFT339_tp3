@@ -95,6 +95,21 @@ chainetab<TYPE>::cellule::cellule(TYPE* tab, cellule* pred, cellule* next)
 template <typename TYPE>
 chainetab<TYPE>::chainetab(size_t tabsize)
 {
+    // initialiser param pour cellule
+    TYPE* tab = new TYPE[tabsize];
+    // initialiser premiere cellule
+    cellule* cFirst = new cellule(tab, nullptr, nullptr);
+
+    // ajuster param chaine tab
+    // pFirst demeure sur nullptr tant que premier elt pas ajouter
+    // afficher_contenu() regarde si pFirst = nullptr
+    pFirst = nullptr;
+
+    pLast = cFirst;
+    this->tabsize=tabsize;
+    dim=0;
+    pospremier=0;
+    posdernier=0;
 
 }
 
@@ -188,7 +203,14 @@ void chainetab<TYPE>::push_back(const TYPE& val)
 template <typename TYPE>
 void chainetab<TYPE>::clear()
 {
-    //implémentez-moi
+    cellule* ptr = pFirst;
+    while(ptr->next!= nullptr){
+        delete [] ptr->tab;
+        ptr = ptr->next;
+    }
+
+    delete pFirst;
+    delete pLast;
 }
 
 
