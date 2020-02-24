@@ -195,7 +195,10 @@ void chainetab<TYPE>::push_back(const TYPE &val) {
     // Sinon creer nouvelle cellule
     if (dim % tabsize > 0  || dim == 0) {
         pLast->tab[dim % tabsize] = val;
+        // incrementer position du premier tableau
+        posdernier++;
     } else {
+        cout<<val<<endl;
         // creer nouvelle cellule
         // ajouter val
         TYPE* tab = new TYPE[tabsize];
@@ -206,8 +209,8 @@ void chainetab<TYPE>::push_back(const TYPE &val) {
         pLast->next = cNew;
         pLast = cNew;
 
-        // ajuster les compteurs
-        posdernier++;
+        // remettre position du dernier tableau a zero
+        posdernier=0;
     }
 
     dim++;
