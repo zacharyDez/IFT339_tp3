@@ -8,6 +8,7 @@
 
 
 #include <iostream>
+
 using namespace std;
 
 /**
@@ -149,15 +150,31 @@ chainetab<TYPE> &chainetab<TYPE>::operator=(const chainetab &source) {
  */
 template<typename TYPE>
 TYPE &chainetab<TYPE>::operator[](size_t i) {
-    int idxTab = i % tabsize;
-    int noCell = (i-idxTab)/tabsize;
+    cellule *ptr = pFirst;
 
-    cellule* ptr = pFirst;
-    for(int i=0; i!=noCell;i++){
+    // dans le cas ou pospremier n'est pas situe sur premier elt
+    if (pospremier != 0) {
+        // verifier si position est d'abord dans pFirst
+        if (i < tabsize - pospremier) {
+            return pFirst->tab[pospremier + i];
+        } else {
+            // if faut prendre en compte le decalage de la position pour suivre le meme logique
+            // change le ptr pour le prochain tab
+            ptr = ptr->next;
+            // on ajuste i avec le nbre d'elt dans le premier tableau
+            i = i - (tabsize - pospremier);
+        }
+    }
+
+    int idxTab = i % tabsize;
+    int noCell = (i - idxTab) / tabsize;
+
+    for (int i = 0; i != noCell; i++) {
         ptr = ptr->next;
     }
 
     return ptr->tab[idxTab];
+
 
 }
 
@@ -181,25 +198,32 @@ void chainetab<TYPE>::push_front(const TYPE &val) {
         pFirst = pLast;
     }
 
+    // si dimension est de 0, initialiser premier valeur sans decrementer pospremier
+    if (dim == 0) {
+        pFirst->tab[pospremier] = val;
+        dim++;
+        return;
+    }
+
     // Si dimension tableau pas atteint ajouter au tableau ou dimension pas de zero
     // Sinon creer nouvelle cellule
-    if (pospremier>0) {
-        pFirst->tab[pospremier] = val;
-        // incrementer position du premier tableau
+    if (pospremier > 0) {
+        // decrementer avec d'affecter valeur
         pospremier--;
+        pFirst->tab[pospremier] = val;
     } else {
         // creer nouvelle cellule
         // ajouter val
-        TYPE* tab = new TYPE[tabsize];
-        cellule* cNew = new cellule(tab, nullptr, pFirst);
-        cNew->tab[tabsize-1]=val;
+        TYPE *tab = new TYPE[tabsize];
+        cellule *cNew = new cellule(tab, nullptr, pFirst);
+        cNew->tab[tabsize - 1] = val;
 
         // ajuster les pointeurs
         pFirst->pred = cNew;
         pFirst = cNew;
 
         // remettre position du dernier tableau a zero
-        pospremier=tabsize-1;
+        pospremier = tabsize - 1;
     }
 
     dim++;
@@ -218,23 +242,23 @@ void chainetab<TYPE>::push_back(const TYPE &val) {
 
     // Si dimension tableau pas atteint ajouter au tableau ou dimension pas de zero
     // Sinon creer nouvelle cellule
-    if (dim % tabsize > 0  || dim == 0) {
+    if (dim % tabsize > 0 || dim == 0) {
         pLast->tab[dim % tabsize] = val;
         // incrementer position du premier tableau
         posdernier++;
     } else {
         // creer nouvelle cellule
         // ajouter val
-        TYPE* tab = new TYPE[tabsize];
-        cellule* cNew = new cellule(tab, pLast, nullptr);
-        cNew->tab[0]=val;
+        TYPE *tab = new TYPE[tabsize];
+        cellule *cNew = new cellule(tab, pLast, nullptr);
+        cNew->tab[0] = val;
 
         // ajuster les pointeurs
         pLast->next = cNew;
         pLast = cNew;
 
         // remettre position du dernier tableau a zero
-        posdernier=0;
+        posdernier = 0;
     }
 
     dim++;
@@ -263,7 +287,28 @@ void chainetab<TYPE>::clear() {
  */
 template<typename TYPE>
 void chainetab<TYPE>::pop_front() {
-    //implémentez-moi
+    if(dim==1){
+        // replacer ptrs
+        dim--;
+        return;
+    }
+
+    if(pospremier==tabsize-1){
+        // eviter fuite de memoire
+        delete [] pFirst->tab;
+
+        // replacer ptrs
+        pFirst = pFirst->next;
+        pFirst->pred = nullptr;
+
+        // configurer dimensions
+        pospremier = 0;
+        dim--;
+
+    } else{
+        pospremier++;
+        dim--;
+    }
 }
 
 
@@ -299,12 +344,16 @@ void chainetab<TYPE>::afficher_contenu() {
         if (ptr->next == nullptr)
             fin = posdernier;       //si on est sur la dernière cellule
 
-        for (size_t i = 0; i < tabsize; ++i) {
-            if (i < depart || i > fin)
-                std::cout << "X";
-            else
-                std::cout << ptr->tab[i];
-            std::cout << "  ";
+        // j'ai ajouter la condition de regarder la dimension
+        // pour eviter bug lorsque pop tableau avec seulement un elt
+        if(dim!=0){
+            for (size_t i = 0; i < tabsize; ++i) {
+                if (i < depart || i > fin)
+                    std::cout << "X";
+                else
+                    std::cout << ptr->tab[i];
+                std::cout << "  ";
+            }
         }
 
         std::cout << "]";

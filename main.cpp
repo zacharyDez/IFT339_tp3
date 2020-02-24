@@ -25,7 +25,21 @@ void pop_many(chainetab<int> &c, size_t howMany, bool isFront)
 
 int main() {
 
-    //Ce code a généré la sortie attendue.  
+    chainetab<int> a(10);
+
+    a.push_front(-1);
+    a.pop_front();
+    a.afficher_contenu();
+
+    a.push_front(-2);
+    a.push_front(-3);
+    a.pop_front();
+    a.push_back(10);
+    a.push_back(11);
+    a.pop_front();
+    a.afficher_contenu();
+
+    //Ce code a généré la sortie attendue.
     chainetab<int> c(10);
 
     c.afficher_contenu();
@@ -41,8 +55,8 @@ int main() {
     c.push_front(-1);
     c.afficher_contenu();   //attendu: 26 éléments sur 4 cellules (car nouvelle cellule insérée au début)
 
-//    c.pop_front();
-//    c.afficher_contenu();   //attendu: 25 éléments sur 3 cellules
+    c.pop_front();
+    c.afficher_contenu();   //attendu: 25 éléments sur 3 cellules
 //
 //
 //
