@@ -176,8 +176,33 @@ size_t chainetab<TYPE>::size() const {
  */
 template<typename TYPE>
 void chainetab<TYPE>::push_front(const TYPE &val) {
+    // faire pointer pFirst sur pLast
+    if (pFirst == nullptr) {
+        pFirst = pLast;
+    }
 
-    //implémentez moi
+    // Si dimension tableau pas atteint ajouter au tableau ou dimension pas de zero
+    // Sinon creer nouvelle cellule
+    if (pospremier>0) {
+        pFirst->tab[pospremier] = val;
+        // incrementer position du premier tableau
+        pospremier--;
+    } else {
+        // creer nouvelle cellule
+        // ajouter val
+        TYPE* tab = new TYPE[tabsize];
+        cellule* cNew = new cellule(tab, nullptr, pFirst);
+        cNew->tab[tabsize-1]=val;
+
+        // ajuster les pointeurs
+        pFirst->pred = cNew;
+        pFirst = cNew;
+
+        // remettre position du dernier tableau a zero
+        pospremier=tabsize-1;
+    }
+
+    dim++;
 
 }
 
@@ -198,7 +223,6 @@ void chainetab<TYPE>::push_back(const TYPE &val) {
         // incrementer position du premier tableau
         posdernier++;
     } else {
-        cout<<val<<endl;
         // creer nouvelle cellule
         // ajouter val
         TYPE* tab = new TYPE[tabsize];

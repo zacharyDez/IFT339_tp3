@@ -35,11 +35,11 @@ int main() {
         c.push_back(i);
     }
     c.afficher_contenu();   //attendu: 25 éléments sur 3 cellules
-//
-//
-//
-//    c.push_front(-1);
-//    c.afficher_contenu();   //attendu: 26 éléments sur 4 cellules (car nouvelle cellule insérée au début)
+
+
+
+    c.push_front(-1);
+    c.afficher_contenu();   //attendu: 26 éléments sur 4 cellules (car nouvelle cellule insérée au début)
 
 //    c.pop_front();
 //    c.afficher_contenu();   //attendu: 25 éléments sur 3 cellules
