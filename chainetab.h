@@ -317,7 +317,28 @@ void chainetab<TYPE>::pop_front() {
  */
 template<typename TYPE>
 void chainetab<TYPE>::pop_back() {
-    //implémentez-moi
+    if(dim==1){
+        // replacer ptrs
+        dim--;
+        return;
+    }
+
+    if(posdernier==0){
+        // eviter fuite de memoire
+        delete [] pLast->tab;
+
+        // replacer ptrs
+        pLast = pLast->pred;
+        pLast->next = nullptr;
+
+        // configurer dimensions
+        posdernier = tabsize-1;
+        dim--;
+
+    } else{
+        posdernier--;
+        dim--;
+    }
 }
 
 

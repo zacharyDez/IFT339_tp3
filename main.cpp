@@ -28,7 +28,7 @@ int main() {
     chainetab<int> a(10);
 
     a.push_front(-1);
-    a.pop_front();
+    a.pop_back();
     a.afficher_contenu();
 
     a.push_front(-2);
@@ -36,7 +36,7 @@ int main() {
     a.pop_front();
     a.push_back(10);
     a.push_back(11);
-    a.pop_front();
+    a.pop_back();
     a.afficher_contenu();
 
     //Ce code a généré la sortie attendue.
@@ -57,6 +57,18 @@ int main() {
 
     c.pop_front();
     c.afficher_contenu();   //attendu: 25 éléments sur 3 cellules
+
+//    cout<<"----------------------------------"<<endl;
+//    cout<<"Test pop_back"<<endl;
+//    cout<<"----------------------------------"<<endl;
+//    c.pop_back();
+//    c.pop_back();
+//    c.pop_back();
+//    c.pop_back();
+//    c.pop_back();
+//    c.pop_back();
+//    c.afficher_contenu();
+
 //
 //
 //
